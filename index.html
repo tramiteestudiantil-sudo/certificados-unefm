@@ -1,0 +1,1058 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Verificación Oficial de Certificados — UNEFM</title>
+  <style>
+    :root {
+      --bg-canvas: #f7f6f2;
+      --bg-surface: #ffffff;
+      --bg-subtle: #efece4;
+      --bg-hover: #f2efe8;
+
+      --ink-primary: #131820;
+      --ink-secondary: #434d5b;
+      --ink-muted: #5b6573;
+
+      --accent: #143a6e;
+      --accent-hover: #0e2a52;
+      --accent-soft: #e7eef8;
+      --accent-ink-on: #ffffff;
+
+      --status-valid-ink: #0d5c38;
+      --status-valid-bg: #e6f4ec;
+      --status-valid-border: #a8d9be;
+      --status-valid-hero: #0d5c38;
+
+      --status-pending-ink: #854d00;
+      --status-pending-bg: #fdf3e2;
+      --status-pending-border: #e8c78e;
+
+      --status-danger-ink: #9e1c1c;
+      --status-danger-bg: #fceaea;
+      --status-danger-border: #e8a6a6;
+
+      --border-subtle: #dcd7cc;
+      --border-strong: #b8b1a3;
+
+      --font-sans: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+      --font-mono: ui-monospace, "Cascadia Mono", "Consolas", "Liberation Mono", monospace;
+
+      --radius-sm: 6px;
+      --radius-md: 10px;
+      --radius-lg: 14px;
+      --shadow-sm: 0 1px 2px rgba(19, 24, 32, 0.05);
+      --shadow-md: 0 8px 24px rgba(19, 24, 32, 0.12);
+      --transition-fast: 160ms cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+    html {
+      font-size: 16px;
+      color-scheme: light;
+      scrollbar-color: var(--border-strong) var(--bg-canvas);
+      scrollbar-width: thin;
+    }
+
+    body {
+      margin: 0;
+      font-family: var(--font-sans);
+      font-size: 0.9375rem;
+      line-height: 1.5;
+      color: var(--ink-primary);
+      background-color: var(--bg-canvas);
+      caret-color: var(--accent);
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    ::selection {
+      background-color: var(--accent);
+      color: var(--accent-ink-on);
+    }
+
+    ::-webkit-scrollbar {
+      width: 10px;
+      height: 10px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--bg-canvas);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--border-strong);
+      border-radius: 999px;
+      border: 2px solid var(--bg-canvas);
+    }
+
+    :focus-visible {
+      outline: 3px solid var(--accent);
+      outline-offset: 2px;
+    }
+
+    [hidden] {
+      display: none !important;
+    }
+
+    .tabular {
+      font-variant-numeric: tabular-nums;
+    }
+
+    .mono {
+      font-family: var(--font-mono);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .site-header {
+      background-color: var(--bg-surface);
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .header-inner {
+      max-width: 860px;
+      margin-inline: auto;
+      padding: 0.875rem 1.25rem;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      color: var(--ink-primary);
+    }
+
+    .brand-mark {
+      width: 42px;
+      height: 42px;
+      border-radius: var(--radius-sm);
+      background-color: var(--accent);
+      color: var(--accent-ink-on);
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+    }
+
+    .brand-title {
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: -0.015em;
+      line-height: 1.25;
+      margin: 0;
+    }
+
+    .brand-subtitle {
+      font-size: 0.8125rem;
+      color: var(--ink-secondary);
+      margin: 0;
+    }
+
+    .source-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 0.3rem 0.65rem;
+      border-radius: 999px;
+      background-color: var(--bg-subtle);
+      color: var(--ink-secondary);
+      border: 1px solid var(--border-subtle);
+    }
+
+    main {
+      flex: 1;
+      width: 100%;
+      max-width: 860px;
+      margin-inline: auto;
+      padding: 1.5rem 1.25rem 2.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    .search-card {
+      background-color: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 1.35rem;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .search-card h1 {
+      font-size: 1.4375rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.25;
+      margin: 0 0 0.35rem;
+    }
+
+    .page-lead {
+      margin: 0;
+      color: var(--ink-secondary);
+      max-width: 66ch;
+    }
+
+    .lookup-form {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      align-items: flex-end;
+      margin-top: 1.125rem;
+    }
+
+    .lookup-field {
+      flex: 1 1 260px;
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    label {
+      font-size: 0.8125rem;
+      font-weight: 600;
+      color: var(--ink-secondary);
+    }
+
+    input[type="text"] {
+      font: inherit;
+      font-size: max(1rem, 1em);
+      color: var(--ink-primary);
+      background-color: var(--bg-surface);
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius-sm);
+      padding: 0.55rem 0.75rem;
+      min-height: 44px;
+      width: 100%;
+    }
+
+    input:user-invalid {
+      border-color: var(--status-danger-ink);
+    }
+
+    .btn {
+      appearance: none;
+      font: inherit;
+      font-size: 0.9375rem;
+      font-weight: 600;
+      line-height: 1.2;
+      min-height: 44px;
+      padding: 0.55rem 1.1rem;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border-strong);
+      background-color: var(--bg-surface);
+      color: var(--ink-primary);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.45rem;
+      text-decoration: none;
+      white-space: nowrap;
+      transition: background-color var(--transition-fast), border-color var(--transition-fast);
+    }
+
+    .btn:hover:not(:disabled) {
+      background-color: var(--bg-hover);
+      border-color: var(--ink-secondary);
+    }
+
+    .btn:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+    }
+
+    .btn-primary {
+      background-color: var(--accent);
+      border-color: var(--accent);
+      color: var(--accent-ink-on);
+    }
+
+    .btn-primary:hover:not(:disabled) {
+      background-color: var(--accent-hover);
+      border-color: var(--accent-hover);
+    }
+
+    .btn-sm {
+      min-height: 38px;
+      padding: 0.4rem 0.85rem;
+      font-size: 0.875rem;
+    }
+
+    /* Verification Result Card */
+    .verify-card {
+      background-color: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: var(--shadow-md);
+    }
+
+    .verify-banner {
+      padding: 1.5rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      color: #ffffff;
+    }
+
+    .verify-banner--valid {
+      background-color: var(--status-valid-hero);
+    }
+
+    .verify-banner--revoked {
+      background-color: var(--status-danger-ink);
+    }
+
+    .verify-banner--notfound {
+      background-color: var(--status-pending-ink);
+    }
+
+    .verify-banner--loading {
+      background-color: var(--accent);
+    }
+
+    .verify-seal {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background-color: rgba(255, 255, 255, 0.16);
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+    }
+
+    .verify-banner h2 {
+      margin: 0 0 0.25rem;
+      font-size: 1.375rem;
+      line-height: 1.2;
+      font-weight: 700;
+    }
+
+    .verify-banner p {
+      margin: 0;
+      font-size: 0.9375rem;
+      opacity: 0.95;
+    }
+
+    .verify-body {
+      padding: 1.5rem;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 1.5rem;
+      align-items: start;
+    }
+
+    .verify-dl {
+      margin: 0;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 1rem 1.25rem;
+    }
+
+    .verify-dl-item {
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+    }
+
+    .verify-dl-item--full {
+      grid-column: 1 / -1;
+    }
+
+    .verify-dl dt {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--ink-muted);
+    }
+
+    .verify-dl dd {
+      margin: 0;
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--ink-primary);
+      word-break: break-word;
+    }
+
+    .verify-qr-box {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem;
+      background-color: var(--bg-canvas);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      text-align: center;
+    }
+
+    .verify-qr-box img {
+      display: block;
+      width: 132px;
+      height: 132px;
+      border-radius: 4px;
+      background: #ffffff;
+    }
+
+    .verify-footer {
+      padding: 1rem 1.5rem;
+      background-color: var(--bg-subtle);
+      border-top: 1px solid var(--border-subtle);
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      font-size: 0.8125rem;
+      color: var(--ink-secondary);
+    }
+
+    .seal-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.25rem 0.65rem;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--status-valid-ink);
+      background-color: var(--status-valid-bg);
+      border: 1px solid var(--status-valid-border);
+    }
+
+    .hash-code {
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      word-break: break-all;
+      color: var(--ink-secondary);
+      background-color: var(--bg-canvas);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      padding: 0.4rem 0.65rem;
+      display: block;
+      margin-top: 0.2rem;
+    }
+
+    .integrity-panel {
+      padding: 1.25rem 1.5rem;
+      border-top: 1px solid var(--border-subtle);
+      background-color: var(--bg-canvas);
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .integrity-panel h3 {
+      margin: 0;
+      font-size: 0.9375rem;
+      font-weight: 700;
+      color: var(--ink-primary);
+    }
+
+    .integrity-lead {
+      margin: 0;
+      font-size: 0.875rem;
+      color: var(--ink-secondary);
+    }
+
+    .integrity-dropzone {
+      border: 1px dashed var(--border-strong);
+      border-radius: var(--radius-md);
+      background-color: var(--bg-surface);
+      padding: 1rem 1.125rem;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      transition: border-color var(--transition-fast), background-color var(--transition-fast);
+    }
+
+    .integrity-dropzone.is-dragover {
+      border-color: var(--accent);
+      background-color: var(--accent-soft);
+    }
+
+    .integrity-file-input {
+      font: inherit;
+      font-size: 0.875rem;
+      max-width: 100%;
+    }
+
+    .integrity-result {
+      border-radius: var(--radius-md);
+      padding: 0.95rem 1.125rem;
+      border: 1px solid var(--border-subtle);
+      font-size: 0.875rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+    }
+
+    .integrity-result--valid {
+      background-color: var(--status-valid-bg);
+      border-color: var(--status-valid-border);
+      color: var(--status-valid-ink);
+    }
+
+    .integrity-result--danger {
+      background-color: var(--status-danger-bg);
+      border-color: var(--status-danger-border);
+      color: var(--status-danger-ink);
+    }
+
+    .integrity-result--pending {
+      background-color: var(--status-pending-bg);
+      border-color: var(--status-pending-border);
+      color: var(--status-pending-ink);
+    }
+
+    .skeleton-stack {
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .skeleton-line {
+      height: 16px;
+      border-radius: 4px;
+      background-color: var(--bg-subtle);
+    }
+
+    .skeleton-line--short {
+      width: 45%;
+    }
+
+    .skeleton-line--med {
+      width: 72%;
+    }
+
+    footer {
+      border-top: 1px solid var(--border-subtle);
+      background-color: var(--bg-surface);
+      padding: 0.875rem 1.25rem;
+      font-size: 0.8125rem;
+      color: var(--ink-muted);
+      text-align: center;
+    }
+
+    @media (max-width: 640px) {
+      .verify-body {
+        grid-template-columns: 1fr;
+      }
+      .verify-qr-box {
+        justify-self: start;
+      }
+    }
+
+    @media (pointer: coarse) {
+      .btn,
+      input[type="text"] {
+        min-height: 48px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 3l8 4v5c0 5.25-3.4 9.74-8 11-4.6-1.26-8-5.75-8-11V7l8-4z"/>
+            <path d="M9 12l2 2 4-4"/>
+          </svg>
+        </div>
+        <div>
+          <p class="brand-title">UNEFM · Validación Oficial de Certificados</p>
+          <p class="brand-subtitle">Portal público independiente — sin inicio de sesión requerido</p>
+        </div>
+      </div>
+      <span class="source-pill" id="source-badge">Consulta directa sin cookies</span>
+    </div>
+  </header>
+
+  <main>
+    <div class="search-card">
+      <h1>Verificación Pública de Certificados</h1>
+      <p class="page-lead">
+        Comprueba en línea la autenticidad de un certificado escaneando su código QR o escribiendo el código único (por ejemplo, <code class="mono">CERT-2026-001</code>) o número de cédula.
+      </p>
+      <search>
+        <form class="lookup-form" id="verify-form">
+          <div class="lookup-field">
+            <label for="verify-query">Código de Certificado o Cédula</label>
+            <input type="text" id="verify-query" name="id" placeholder="Ej: CERT-2026-001 o V-18479806" required autocorrect="off" autocapitalize="characters" spellcheck="false">
+          </div>
+          <button type="submit" class="btn btn-primary" id="btn-verify-submit">Verificar Autenticidad</button>
+        </form>
+      </search>
+    </div>
+
+    <div id="result-region" aria-live="polite"></div>
+  </main>
+
+  <footer>
+    <span>Universidad Nacional Experimental Francisco de Miranda · Sistema de Verificación de Certificados</span>
+  </footer>
+
+  <script>
+    (function () {
+      'use strict';
+
+      /**
+       * CONFIGURACIÓN DEL VERIFICADOR EXTERNO
+       * 1. API_URL: URL /exec de tu Web App de Apps Script (se consulta con credentials: 'omit',
+       *    sin enviar cookies de sesión de Chrome para evitar fallos en PCs con varios correos).
+       * 2. STATIC_JSON_URL: archivo opcional ./certificados.json exportado desde el panel para
+       *    verificación 100% estática sin depender siquiera de Google Apps Script.
+       */
+      const CONFIG = {
+        API_URL: 'https://script.google.com/macros/s/AKfycbyR_S9JfNRL69RQijVsIgONxvcUqFdvJb4FZPMEsZV-vQlMzpowi0RP8pAAKTsaBzJX/exec',
+        STATIC_JSON_URL: './certificados.json',
+        INSTITUTION: 'Universidad Nacional Experimental Francisco de Miranda (UNEFM)'
+      };
+
+      const urlParams = new URLSearchParams(window.location.search);
+      const apiOverride = (urlParams.get('api') || '').trim();
+      if (apiOverride && /^https:\/\/script\.google\.com\//i.test(apiOverride)) {
+        CONFIG.API_URL = apiOverride;
+      }
+
+      const form = document.getElementById('verify-form');
+      const queryInput = document.getElementById('verify-query');
+      const submitBtn = document.getElementById('btn-verify-submit');
+      const resultRegion = document.getElementById('result-region');
+      const sourceBadge = document.getElementById('source-badge');
+
+      let staticCache = null;
+
+      function escapeHtml(str) {
+        return String(str == null ? '' : str)
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#39;');
+      }
+
+      function buildQrImageUrl(url) {
+        return 'https://quickchart.io/qr?size=320&margin=1&ecLevel=M&text=' + encodeURIComponent(url);
+      }
+
+      function renderLoading(query) {
+        resultRegion.innerHTML =
+          '<article class="verify-card">' +
+            '<div class="verify-banner verify-banner--loading">' +
+              '<div class="verify-seal" aria-hidden="true">' +
+                '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>' +
+              '</div>' +
+              '<div>' +
+                '<h2>Consultando registro oficial...</h2>' +
+                '<p>Validando el código <strong class="mono">' + escapeHtml(query) + '</strong></p>' +
+              '</div>' +
+            '</div>' +
+            '<div class="skeleton-stack" aria-hidden="true">' +
+              '<div class="skeleton-line skeleton-line--med"></div>' +
+              '<div class="skeleton-line skeleton-line--short"></div>' +
+              '<div class="skeleton-line"></div>' +
+            '</div>' +
+          '</article>';
+      }
+
+      function renderError(query, detail) {
+        resultRegion.innerHTML =
+          '<article class="verify-card">' +
+            '<div class="verify-banner verify-banner--notfound">' +
+              '<div class="verify-seal" aria-hidden="true">' +
+                '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">' +
+                  '<path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>' +
+                  '<line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>' +
+                '</svg>' +
+              '</div>' +
+              '<div>' +
+                '<h2>No se pudo completar la consulta</h2>' +
+                '<p>' + escapeHtml(detail || 'Verifica tu conexión a internet o la URL de la API configurada.') + '</p>' +
+              '</div>' +
+            '</div>' +
+            '<div class="verify-footer">' +
+              '<span>' + escapeHtml(CONFIG.INSTITUTION) + '</span>' +
+              '<button type="button" class="btn btn-sm btn-primary" id="btn-retry-verify">Reintentar consulta</button>' +
+            '</div>' +
+          '</article>';
+
+        const retryBtn = document.getElementById('btn-retry-verify');
+        if (retryBtn) {
+          retryBtn.addEventListener('click', () => verifyCode(query));
+        }
+      }
+
+      function renderResult(result) {
+        if (!result || !result.found || !result.certificate) {
+          resultRegion.innerHTML =
+            '<article class="verify-card">' +
+              '<div class="verify-banner verify-banner--notfound">' +
+                '<div class="verify-seal" aria-hidden="true">' +
+                  '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">' +
+                    '<circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>' +
+                  '</svg>' +
+                '</div>' +
+                '<div>' +
+                  '<h2>Certificado No Encontrado</h2>' +
+                  '<p>' + escapeHtml((result && result.message) || 'El código consultado no figura en el registro oficial.') + '</p>' +
+                '</div>' +
+              '</div>' +
+              '<div class="verify-footer">' +
+                '<span>' + escapeHtml((result && result.institution) || CONFIG.INSTITUTION) + '</span>' +
+                '<span class="mono">Consulta: ' + escapeHtml((result && result.checkedAt) || new Date().toLocaleString()) + '</span>' +
+              '</div>' +
+            '</article>';
+          return;
+        }
+
+        const c = result.certificate;
+        const isValid = Boolean(result.valid);
+        const bannerClass = isValid ? 'verify-banner--valid' : 'verify-banner--revoked';
+        const titleText = isValid ? 'Certificado Válido' : 'Certificado Revocado';
+        const pageUrl = window.location.origin + window.location.pathname + '?id=' + encodeURIComponent(c.id);
+        const qrSrc = buildQrImageUrl(c.verifyUrl || pageUrl);
+        const expectedSha = String(c.pdfSha256 || '').trim().toLowerCase();
+        const sigOk = result.signatureValid === true;
+
+        resultRegion.innerHTML =
+          '<article class="verify-card">' +
+            '<div class="verify-banner ' + bannerClass + '">' +
+              '<div class="verify-seal" aria-hidden="true">' +
+                (isValid
+                  ? '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>'
+                  : '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>'
+                ) +
+              '</div>' +
+              '<div>' +
+                '<h2>' + titleText + '</h2>' +
+                '<p>' + escapeHtml(result.message) + '</p>' +
+              '</div>' +
+            '</div>' +
+            '<div class="verify-body">' +
+              '<dl class="verify-dl">' +
+                '<div class="verify-dl-item verify-dl-item--full">' +
+                  '<dt>Titular del Certificado</dt>' +
+                  '<dd>' + escapeHtml(c.nombre) + '</dd>' +
+                '</div>' +
+                '<div class="verify-dl-item">' +
+                  '<dt>Cédula / Documento</dt>' +
+                  '<dd class="tabular">' + escapeHtml(c.cedula) + '</dd>' +
+                '</div>' +
+                '<div class="verify-dl-item">' +
+                  '<dt>Código Único</dt>' +
+                  '<dd class="mono">' + escapeHtml(c.id) + '</dd>' +
+                '</div>' +
+                '<div class="verify-dl-item verify-dl-item--full">' +
+                  '<dt>Programa / Evento</dt>' +
+                  '<dd>' + escapeHtml(c.curso) + '</dd>' +
+                '</div>' +
+                (c.titulo ? (
+                  '<div class="verify-dl-item verify-dl-item--full">' +
+                    '<dt>Título de la Ponencia</dt>' +
+                    '<dd>' + escapeHtml(c.titulo) + '</dd>' +
+                  '</div>'
+                ) : '') +
+                '<div class="verify-dl-item">' +
+                  '<dt>Calidad</dt>' +
+                  '<dd>' + escapeHtml(c.calidad || 'Participante') + '</dd>' +
+                '</div>' +
+                '<div class="verify-dl-item">' +
+                  '<dt>Fecha de Emisión</dt>' +
+                  '<dd class="tabular">' + escapeHtml(c.fecha) + '</dd>' +
+                '</div>' +
+                '<div class="verify-dl-item">' +
+                  '<dt>Estado en Registro</dt>' +
+                  '<dd>' + escapeHtml(c.estado) + '</dd>' +
+                '</div>' +
+                (expectedSha
+                  ? '<div class="verify-dl-item verify-dl-item--full">' +
+                      '<dt>Huella Criptográfica SHA-256 del PDF</dt>' +
+                      '<dd>' +
+                        (sigOk
+                          ? '<span class="seal-badge"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M12 3l8 4v5c0 5.25-3.4 9.74-8 11-4.6-1.26-8-5.75-8-11V7l8-4z"/><path d="M9 12l2 2 4-4"/></svg>Sello SHA-256 / HMAC verificado</span>'
+                          : '') +
+                        '<code class="hash-code">' + escapeHtml(expectedSha) + '</code>' +
+                      '</dd>' +
+                    '</div>'
+                  : '') +
+              '</dl>' +
+              '<div class="verify-qr-box">' +
+                '<img src="' + escapeHtml(qrSrc) + '" alt="Código QR de verificación para ' + escapeHtml(c.id) + '" width="132" height="132">' +
+                '<span class="mono">' + escapeHtml(c.id) + '</span>' +
+              '</div>' +
+            '</div>' +
+            (isValid
+              ? '<section class="integrity-panel" aria-labelledby="integrity-title">' +
+                  '<h3 id="integrity-title">Comprobar integridad del archivo PDF (Anti-edición)</h3>' +
+                  '<p class="integrity-lead">Selecciona o arrastra el PDF recibido para comprobar localmente (sin subir el archivo) que no ha sido modificado ni editado después de su emisión.</p>' +
+                  '<div class="integrity-dropzone" id="pdf-dropzone">' +
+                    '<label for="pdf-integrity-input">Seleccionar archivo PDF del certificado</label>' +
+                    '<input type="file" id="pdf-integrity-input" class="integrity-file-input" accept="application/pdf,.pdf">' +
+                  '</div>' +
+                  '<div id="pdf-integrity-status" role="status" aria-live="polite"></div>' +
+                '</section>'
+              : '') +
+            '<div class="verify-footer">' +
+              '<span>' + escapeHtml(result.institution || CONFIG.INSTITUTION) + ' · Verificado: <strong class="mono">' + escapeHtml(result.checkedAt || '') + '</strong></span>' +
+              (c.pdfUrl && isValid
+                ? '<a class="btn btn-sm btn-primary" href="' + escapeHtml(c.pdfUrl) + '" target="_blank" rel="noopener noreferrer">Ver Certificado PDF</a>'
+                : '') +
+            '</div>' +
+          '</article>';
+
+        if (isValid) {
+          bindPdfIntegrityChecker(expectedSha);
+        }
+      }
+
+      async function computeFileSha256Hex(file) {
+        const buf = await file.arrayBuffer();
+        const hashBuf = await window.crypto.subtle.digest('SHA-256', buf);
+        return Array.from(new Uint8Array(hashBuf))
+          .map(b => b.toString(16).padStart(2, '0'))
+          .join('');
+      }
+
+      function bindPdfIntegrityChecker(expectedSha) {
+        const input = document.getElementById('pdf-integrity-input');
+        const dropzone = document.getElementById('pdf-dropzone');
+        const statusEl = document.getElementById('pdf-integrity-status');
+        if (!input || !dropzone || !statusEl) return;
+
+        async function handleFile(file) {
+          if (!file) return;
+          if (!expectedSha) {
+            statusEl.innerHTML =
+              '<div class="integrity-result integrity-result--pending">' +
+                '<strong>Certificado pendiente de sellado SHA-256</strong>' +
+                '<span>Este registro fue generado antes de activar el sellado criptográfico. Regenera el PDF desde el panel para registrar su huella SHA-256.</span>' +
+              '</div>';
+            return;
+          }
+          if (!window.crypto || !window.crypto.subtle) {
+            statusEl.innerHTML =
+              '<div class="integrity-result integrity-result--pending">' +
+                '<strong>Verificación local no disponible en este navegador</strong>' +
+                '<span>Abre esta página mediante HTTPS para calcular la huella SHA-256 localmente.</span>' +
+              '</div>';
+            return;
+          }
+
+          statusEl.innerHTML = '<div class="integrity-result">Calculando huella SHA-256 de <strong>' + escapeHtml(file.name) + '</strong>...</div>';
+          try {
+            const computed = await computeFileSha256Hex(file);
+            if (computed === expectedSha) {
+              statusEl.innerHTML =
+                '<div class="integrity-result integrity-result--valid">' +
+                  '<strong>Archivo PDF Auténtico e Inalterado</strong>' +
+                  '<span>El archivo coincide byte a byte con el PDF original emitido por la institución.</span>' +
+                  '<code class="hash-code">' + escapeHtml(computed) + '</code>' +
+                '</div>';
+            } else {
+              statusEl.innerHTML =
+                '<div class="integrity-result integrity-result--danger">' +
+                  '<strong>ALERTA: Archivo PDF Alterado o No Coincidente</strong>' +
+                  '<span>El archivo evaluado no coincide con el PDF original registrado para este código.</span>' +
+                  '<span>Hash del archivo evaluado: <code class="hash-code">' + escapeHtml(computed) + '</code></span>' +
+                  '<span>Hash oficial esperado: <code class="hash-code">' + escapeHtml(expectedSha) + '</code></span>' +
+                '</div>';
+            }
+          } catch (err) {
+            statusEl.innerHTML =
+              '<div class="integrity-result integrity-result--danger">' +
+                '<strong>No se pudo leer el archivo PDF</strong>' +
+                '<span>' + escapeHtml(err && err.message ? err.message : 'Error de lectura local.') + '</span>' +
+              '</div>';
+          }
+        }
+
+        input.addEventListener('change', () => {
+          if (input.files && input.files[0]) handleFile(input.files[0]);
+        });
+        dropzone.addEventListener('dragover', (e) => {
+          e.preventDefault();
+          dropzone.classList.add('is-dragover');
+        });
+        dropzone.addEventListener('dragleave', () => {
+          dropzone.classList.remove('is-dragover');
+        });
+        dropzone.addEventListener('drop', (e) => {
+          e.preventDefault();
+          dropzone.classList.remove('is-dragover');
+          if (e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0]) {
+            handleFile(e.dataTransfer.files[0]);
+          }
+        });
+      }
+
+      async function tryStaticLookup(query) {
+        if (!staticCache) {
+          const resp = await fetch(CONFIG.STATIC_JSON_URL, { cache: 'no-store' });
+          if (!resp.ok) throw new Error('Sin catálogo estático');
+          staticCache = await resp.json();
+        }
+        const list = Array.isArray(staticCache.certificates) ? staticCache.certificates : [];
+        const norm = query.trim().toUpperCase();
+        const cleanCed = query.replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
+
+        let match = list.find(item => String(item.id || '').trim().toUpperCase() === norm);
+        if (!match && cleanCed.length >= 5) {
+          match = list.find(item => String(item.cedula || '').replace(/[^a-zA-Z0-9]/g, '').toUpperCase() === cleanCed);
+        }
+
+        const checkedAt = staticCache.generatedAt || new Date().toLocaleString();
+        const institution = staticCache.institution || CONFIG.INSTITUTION;
+        if (!match) {
+          return {
+            found: false,
+            valid: false,
+            status: 'NOT_FOUND',
+            message: 'El código "' + query + '" no figura en el registro oficial.',
+            certificate: null,
+            institution: institution,
+            checkedAt: checkedAt
+          };
+        }
+        const isRevoked = String(match.estado || '').toUpperCase() === 'REVOCADO';
+        return {
+          found: true,
+          valid: !isRevoked,
+          status: isRevoked ? 'REVOKED' : 'VALID',
+          message: isRevoked
+            ? 'Este certificado fue revocado o anulado por la institución emisora.'
+            : 'Certificado Válido. Los datos coinciden con el registro oficial verificado.',
+          certificate: match,
+          institution: institution,
+          checkedAt: checkedAt
+        };
+      }
+
+      async function fetchAppsScriptCookieFree(query) {
+        const sep = CONFIG.API_URL.indexOf('?') === -1 ? '?' : '&';
+        const url = CONFIG.API_URL + sep + 'api=verify&id=' + encodeURIComponent(query);
+        // credentials: 'omit' impide enviar cookies de sesiones Google (resuelve el error de múltiples correos)
+        const resp = await fetch(url, {
+          method: 'GET',
+          redirect: 'follow',
+          credentials: 'omit',
+          cache: 'no-store'
+        });
+        if (!resp.ok) {
+          throw new Error('HTTP ' + resp.status);
+        }
+        return await resp.json();
+      }
+
+      function fetchAppsScriptJsonp(query) {
+        return new Promise((resolve, reject) => {
+          const cbName = '__unefmVerifyCb_' + Date.now();
+          const sep = CONFIG.API_URL.indexOf('?') === -1 ? '?' : '&';
+          const script = document.createElement('script');
+          script.crossOrigin = 'anonymous';
+          script.src = CONFIG.API_URL + sep + 'api=verify&id=' + encodeURIComponent(query) + '&callback=' + cbName;
+
+          const timer = setTimeout(() => {
+            cleanup();
+            reject(new Error('Tiempo de espera agotado al consultar el servidor.'));
+          }, 12000);
+
+          function cleanup() {
+            clearTimeout(timer);
+            try { delete window[cbName]; } catch (e) { window[cbName] = undefined; }
+            if (script.parentNode) script.parentNode.removeChild(script);
+          }
+
+          window[cbName] = function (data) {
+            cleanup();
+            resolve(data);
+          };
+
+          script.onerror = function () {
+            cleanup();
+            reject(new Error('No se pudo conectar con la API pública de verificación.'));
+          };
+
+          document.head.appendChild(script);
+        });
+      }
+
+      async function verifyCode(rawQuery) {
+        const query = String(rawQuery || '').trim();
+        if (!query) return;
+
+        queryInput.value = query;
+        const nextUrl = new URL(window.location.href);
+        nextUrl.searchParams.set('id', query);
+        window.history.replaceState({}, '', nextUrl.toString());
+
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Verificando...';
+        renderLoading(query);
+
+        try {
+          if (CONFIG.API_URL) {
+            try {
+              const data = await fetchAppsScriptCookieFree(query);
+              sourceBadge.textContent = 'Consulta en tiempo real · Sin cookies';
+              renderResult(data);
+              return;
+            } catch (fetchErr) {
+              try {
+                const jsonpData = await fetchAppsScriptJsonp(query);
+                sourceBadge.textContent = 'Consulta en tiempo real · JSONP';
+                renderResult(jsonpData);
+                return;
+              } catch (jsonpErr) {
+                // Si falla la conexión con Apps Script, intenta catálogo estático local si existe
+                const staticData = await tryStaticLookup(query);
+                sourceBadge.textContent = 'Registro estático verificado';
+                renderResult(staticData);
+                return;
+              }
+            }
+          } else {
+            const staticData = await tryStaticLookup(query);
+            sourceBadge.textContent = 'Registro estático verificado';
+            renderResult(staticData);
+          }
+        } catch (err) {
+          renderError(query, err && err.message ? err.message : 'Error de red.');
+        } finally {
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Verificar Autenticidad';
+        }
+      }
+
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        verifyCode(queryInput.value);
+      });
+
+      const initialId = (urlParams.get('id') || urlParams.get('cert') || urlParams.get('codigo') || '').trim();
+      if (initialId) {
+        verifyCode(initialId);
+      }
+    })();
+  </script>
+</body>
+</html>
